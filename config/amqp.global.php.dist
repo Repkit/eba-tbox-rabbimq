@@ -1,0 +1,109 @@
+<?php
+
+$settings = [
+	'amqp' => [
+		'server' => [
+			'host'     => '<amqp_server>',
+			'port'     => '5672',
+			'username' => '<amqp_username>',
+			'password' => '<amqp_password>',
+		]
+	],
+	'rabbitmq_strategy' => [
+		'apigility' => [
+			'target' =>[
+				'ZF\Rest\RestController' => [
+					'events' => [
+						/*async will make disk writes*/
+						/*publish set the publish config for msg */
+						'create.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'delete.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'deleteList.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						// 'get.post' => ['_listener_' => ['callback'=>'_method_', 'priority' => 1, 'async' => 1, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						// 'getList.post' => ['_listener_' => ['callback'=>'_method_', 'priority' => 1, 'async' => 1, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						// 'options.post' => ['_listener_' => ['callback'=>'_method_', 'priority' => 1, 'async' => 1, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'patch.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'update.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'patchList.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+						'replaceList.post' => ['TBoxRabbitMQ\Listener\AMQPListener' => ['callback'=>'emit', 'priority' => 1, 'async' => 0, 'publish' => ['mandatory' => true, 'immediate' => false, 'ticket' => null]]],
+					],
+				],
+			],
+			'black_list'=> [
+				// \Orders\V1\Rest\Orders\Controller::class,
+			],
+		],
+		'ddd_route_event_names' => [
+			/*'route' => [
+				'event' => 'domin-name'
+			]*/
+			'micro-ice-store.rest.products' => [
+				'create.post' => 'store_product.created',
+				'delete.post' => 'store_product.deleted',
+				'patch.post'  => 'store_product.updated',
+				'update.post' => 'store_product.updated',
+			]
+		],
+		'exchanges' => [
+			'default' => [
+				'type' => 'topic',
+				'passive' => false,
+				'durable' => false,
+				'auto_delete' => true,
+				'internal' => false,
+				'nowait' => false,
+				'arguments' => array(),
+				'ticket' => null
+			],
+			'namespaces' => [
+			]
+		],
+		// 'exchanges' => [
+		// 	'default' => [
+		// 		'route_event' =>[],
+		// 		'namespace' => [],
+		// 	],
+		// 	'custom' => [
+		// 		'route_event' =>[],
+		// 		'namespace' => [],
+		// 	],
+			
+		// 	// '* - means any
+		// 	'route' => [
+		// 		'event' => [
+		// 			'name' => [ // exchange name as key cause a message can be dispatched to multiple exchanges
+		// 				'type' => '',
+		// 				'passive' => false,
+		// 				'durable' => false,
+		// 				'auto_delete' => true,
+		// 				'internal' => false,
+		// 				'nowait' => false,
+		// 				'arguments' => array(),
+		// 				'ticket' => null
+		// 			],
+					
+		// 		]
+		// 	]
+		// 	'*' => [
+		// 		'event' => [
+		// 			'name' => '',
+		// 			'type' => '',
+		// 			'passive' => false,
+		// 			'durable' => false,
+		// 			'auto_delete' => true,
+		// 			'internal' => false,
+		// 			'nowait' => false,
+		// 			'arguments' => array(),
+		// 			'ticket' => null
+		// 		]
+		// 	]
+		// ],
+        'queues' => [
+            'default' => '',
+            'namespaces' => [
+            ]
+        ]
+	],
+];
+
+return $settings;
